@@ -32,7 +32,7 @@ const BleScreen: React.FC = () => {
   return (
     <ScrollView contentContainerStyle={{ padding: 20, gap: 10 }}>
       <View style={{ marginBottom: 10 }}>
-        <Button title="Ver Heatmap" onPress={() => navigation.navigate('Heatmap')} />
+        <Button title="See Heatmap" onPress={() => navigation.navigate('Heatmap')} />
       </View>
 
       {isScanning && (

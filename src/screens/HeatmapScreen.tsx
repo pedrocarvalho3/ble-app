@@ -1,31 +1,50 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import mockedData from './mocked_heatmap_data.json';
+
+const CELL_SIZE = 30;
+const NUM_COLS = 10;
 
 export default function HeatmapScreen() {
-  const data = [
-    { x: 1, y: 1, value: 5 },
-    { x: 1, y: 2, value: 10 },
-    { x: 2, y: 1, value: 7 },
-    { x: 2, y: 2, value: 3 },
-    { x: 3, y: 1, value: 9 },
-  ];
+  const maxValue = Math.max(...mockedData.map(d => d.value));
 
   return (
-    <View style={{ padding: 20 }}>
-      <Text style={{ fontSize: 18, marginBottom: 10 }}>Heatmap (Placeholder Data)</Text>
+    <View style={{ flex: 1, padding: 10, alignItems: 'center' }}>
+      <Text style={{ fontSize: 20, marginBottom: 15, fontWeight: 'bold' }}>Heatmap Visualization</Text>
 
-      {data.map((d, index) => (
-        <View key={index} style={{
-          width: 60,
-          height: 60,
-          backgroundColor: `rgba(255,0,0,${d.value / 10})`,
-          margin: 2,
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
-          <Text style={{ color: 'white' }}>{d.value}</Text>
-        </View>
-      ))}
+      <View style={{
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        width: CELL_SIZE * NUM_COLS,
+        borderWidth: 1,
+        borderColor: '#ccc',
+      }}>
+        {mockedData.map((d, index) => {
+          const normalizedValue = d.value / maxValue;
+          const red = normalizedValue * 255;
+          const blue = (1 - normalizedValue) * 255;
+          const backgroundColor = `rgb(${red}, 0, ${blue})`;
+
+          return (
+            <View
+              key={index}
+              style={{
+                width: CELL_SIZE,
+                height: CELL_SIZE,
+                backgroundColor: backgroundColor,
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderWidth: 0.5,
+                borderColor: '#eee',
+              }}
+            >
+              <Text style={{ color: 'white', fontSize: 10 }}>{d.value}</Text>
+            </View>
+          );
+        })}
+      </View>
     </View>
   );
 }
+
+

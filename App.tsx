@@ -9,7 +9,7 @@ const Stack = createNativeStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Ble">
+      <Stack.Navigator initialRouteName="BLE">
         <Stack.Screen name="BLE" component={BleScreen} />
         <Stack.Screen name="Heatmap" component={HeatmapScreen} />
       </Stack.Navigator>
