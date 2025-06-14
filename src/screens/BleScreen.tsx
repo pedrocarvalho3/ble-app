@@ -9,40 +9,23 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import BleManager, { Peripheral, BleManagerDidUpdateValueForCharacteristicEvent } from 'react-native-ble-manager';
+import BleManager from 'react-native-ble-manager';
 import { Buffer } from 'buffer';
 import { useBleSetup } from '../hooks/useBleSetup';
+import { useBleScanner } from '../hooks/useBleScanner';
 
 global.Buffer = Buffer;
 
 const BleScreen: React.FC = () => {
-  const [devices, setDevices] = useState<Peripheral[]>([]);
-  const [isScanning, setIsScanning] = useState<boolean>(false);
   const [connectedDeviceId, setConnectedDeviceId] = useState<string | null>(null);
   const [serviceUUID, setServiceUUID] = useState<string>('');
   const [characteristicUUID, setCharacteristicUUID] = useState<string>('');
   const [data, setData] = useState<string>('');
   const [receivedData, setReceivedData] = useState<string>('');
 
-  useBleSetup(setReceivedData);
+  const { devices, isScanning, scanDevices } = useBleScanner();
 
-  const scanDevices = async () => {
-    setDevices([]);
-    setIsScanning(true);
-    try {
-      await BleManager.scan([], 5, true);
-      setTimeout(async () => {
-        const found = await BleManager.getDiscoveredPeripherals();
-        setDevices(found);
-      }, 6000);
-      devices.length > 0 && setIsScanning(false);
-    } catch (error) {
-      console.error('Scan Devices Error:', error);
-      setIsScanning(false)
-    } finally {
-      setIsScanning(false);
-    }
-  };
+  useBleSetup(setReceivedData);
 
   const connectToDevice = async (id: string) => {
     try {
