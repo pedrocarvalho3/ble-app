@@ -5,23 +5,16 @@ import { Buffer } from 'buffer';
 
 export const useBleConnection = () => {
   const [connectedDeviceId, setConnectedDeviceId] = useState<string | null>(null);
-  const [serviceUUID, setServiceUUID] = useState<string>('');
-  const [characteristicUUID, setCharacteristicUUID] = useState<string>('');
+  const [serviceUUID, setServiceUUID] = useState<string>('f31ae6a6-bc53-4b56-b6dc-21bf6dacbfcd');
+  const [characteristicUUID, setCharacteristicUUID] = useState<string>('1111');
 
   const connectToDevice = async (id: string) => {
     try {
       await BleManager.connect(id);
-      const peripheralInfo = await BleManager.retrieveServices(id);
-      const characteristics = peripheralInfo.characteristics;
+      const infoPeripheral = await BleManager.retrieveServices(id);
 
-      if (characteristics && characteristics.length > 0) {
-        const lastCharacteristic = characteristics[9];
-        setServiceUUID(lastCharacteristic.service);
-        setCharacteristicUUID(lastCharacteristic.characteristic);
-        setConnectedDeviceId(id);
-      } else {
-        Alert.alert('No characteristics found for this device.');
-      }
+      console.log('Connected to Device:', infoPeripheral);
+      setConnectedDeviceId(id);
     } catch (error) {
       console.error('Connect to Device Error:', error);
     }
