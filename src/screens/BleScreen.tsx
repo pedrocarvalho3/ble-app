@@ -4,17 +4,20 @@ import {
   Button,
   ScrollView,
   TextInput,
+  View,
 } from 'react-native';
 import { Buffer } from 'buffer';
 import { useBleSetup } from '../hooks/useBleSetup';
 import { useBleScanner } from '../hooks/useBleScanner';
 import { useBleConnection } from '../hooks/useBleConnection';
+import { useNavigation } from '@react-navigation/native';
 
 global.Buffer = Buffer;
 
 const BleScreen: React.FC = () => {
   const [data, setData] = useState<string>('');
   const [receivedData, setReceivedData] = useState<string>('');
+  const navigation = useNavigation();
 
   const { devices, isScanning, scanDevices } = useBleScanner();
   const {
@@ -28,6 +31,10 @@ const BleScreen: React.FC = () => {
 
   return (
     <ScrollView contentContainerStyle={{ padding: 20, gap: 10 }}>
+      <View style={{ marginBottom: 10 }}>
+        <Button title="Ver Heatmap" onPress={() => navigation.navigate('Heatmap')} />
+      </View>
+
       {isScanning && (
         <Text style={{ fontSize: 16, marginBottom: 10 }}>
           Scanning for devices...
