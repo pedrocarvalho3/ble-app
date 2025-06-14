@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import BleManager, { Peripheral, BleManagerDidUpdateValueForCharacteristicEvent } from 'react-native-ble-manager';
 import { Buffer } from 'buffer';
+import { useBleSetup } from '../hooks/useBleSetup';
 
 global.Buffer = Buffer;
 
@@ -23,25 +24,7 @@ const BleScreen: React.FC = () => {
   const [data, setData] = useState<string>('');
   const [receivedData, setReceivedData] = useState<string>('');
 
-  useEffect(() => {
-    BleManager.start({ showAlert: false });
-    if (Platform.OS === 'android') {
-      PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
-        PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
-      ]);
-    }
-
-    const handler = BleManager.onDidUpdateValueForCharacteristic((event: BleManagerDidUpdateValueForCharacteristicEvent) => {
-      const received = Buffer.from(event.value).toString();
-      setReceivedData(received);
-    });
-
-    return () => {
-      handler.remove();
-    };
-  }, []);
+  useBleSetup(setReceivedData);
 
   const scanDevices = async () => {
     setDevices([]);
