@@ -4,7 +4,6 @@ import {
   Button,
   ScrollView,
   TextInput,
-  TouchableOpacity,
 } from 'react-native';
 import { Buffer } from 'buffer';
 import { useBleSetup } from '../hooks/useBleSetup';
@@ -28,19 +27,16 @@ const BleScreen: React.FC = () => {
   useBleSetup(setReceivedData);
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 20 }}>
+    <ScrollView contentContainerStyle={{ padding: 20, gap: 10 }}>
       {isScanning && (
         <Text style={{ fontSize: 16, marginBottom: 10 }}>
           Scanning for devices...
         </Text>
       )}
 
-      <TouchableOpacity onPress={scanDevices}>
-        <Text style={{ fontSize: 16, padding: 10, backgroundColor: '#ccc' }}>
-          Scan Devices
-        </Text>
-      </TouchableOpacity>
+      <Button title="Scan Devices" onPress={scanDevices} />
 
+      <Text style={{ fontSize: 18, marginVertical: 10 }}>Available Devices:</Text>
       {devices.map(device => (
         <Button
           key={device.id}
